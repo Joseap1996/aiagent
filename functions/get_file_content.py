@@ -1,5 +1,7 @@
 import os
-from .config import MAX_CHARS
+from .constants import MAX_CHARS
+from google import genai
+from google.genai import types
 
 def get_file_content(working_directory, file_path):
     full_path = os.path.join(working_directory,file_path)
@@ -17,3 +19,17 @@ def get_file_content(working_directory, file_path):
                 return string
     except Exception as e:
         return f"Error: {e}"
+
+schema_get_file_content=types.FunctionDeclaration(
+    name="get_file_content",
+    description="Opens and returns a file's content, truncated if exceeds 10000 characters.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file_path the file resides",
+            )
+        }
+    )
+)
